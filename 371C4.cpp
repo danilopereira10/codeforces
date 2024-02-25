@@ -1,0 +1,570 @@
+
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <stack>
+#include <tuple>
+#include <cstring>
+#include <cstdlib>
+#include <bits/stdc++.h>
+#include <iomanip>
+#include <unordered_map>
+#include <set>
+#include <algorithm>
+#include <set>
+#include <list>
+
+
+using namespace std;
+typedef long long ll;
+typedef vector<int> vi;
+typedef vector<tuple<int,int>> vti;
+stack<tuple<int, int, int>> num;/*  */
+stack<tuple<int, int, int>> num2;
+typedef vector<string> vs;
+
+#define YES cout << "YES" << endl;
+#define NO cout << "NO" << endl;
+#define CI cin >>
+#define CO cout <<
+#define EN << endl;
+
+
+
+ll _sieve_size;
+bitset <100> bs;
+vi primes;
+
+void sieve(ll upperbound) {
+    _sieve_size = upperbound + 1;
+    bs.set(); 
+    bs[0] = bs[1] = 0;
+    for (ll i = 2; i <= _sieve_size; i++) if (bs[i]) {
+        for (ll j = i * i; j <= _sieve_size; j += i) bs[j] = 0;
+        primes.push_back((int) i);
+    }
+}
+
+bool isPrime(ll N) {
+    if (N <= _sieve_size) return bs[N];
+    for (int i = 0; i < (int)primes.size(); i++)
+        if (N % primes[i] == 0) return false;
+    return true;
+}
+
+int gcd(int a, int b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+
+vi primeFactors(ll N) {
+    vi factors;
+    ll PF_idx = 0, PF = primes[PF_idx];
+    while (N != 1 && (PF * PF <= N)) {
+        while (N % PF == 0) {
+            N /= PF;
+            factors.push_back(PF);
+        }
+        PF = primes[++PF_idx];
+    }
+    if (N != 1) {
+        factors.push_back(N);
+    }
+    return factors;
+}
+
+vi dividers(ll N) {
+    vi f = primeFactors(N);
+    vi b;
+    
+    b.push_back(1);
+    ll c = 1;
+    //b.push_back(f[0]);
+    //ll c = f[0];
+    for (int i = 0 ; i < f.size(); ) {
+        c = f[i];
+        vi d;
+        d.push_back(c);
+        i++;
+        while (c == f[i]) {
+            d.push_back(c*d[d.size()-1]);
+            i++;
+        }
+        int j = b.size();
+        for (int i = 0; i < j; i++) {
+            for (int k = 0; k < d.size(); k++) {
+                b.push_back(b[i]*d[k]);
+            }
+        }
+    }
+    return b;
+}
+
+vi primeFactors2(ll N) {
+    vi factors;
+    ll PF_idx = 0, PF = primes[PF_idx];
+    while (N != 1 && (PF * PF <= N)) {
+        if (N % PF == 0) {
+            N /= PF;
+            factors.push_back(PF);
+        }
+        while (N % PF == 0) {
+            N /= PF;
+        }
+        PF = primes[++PF_idx];
+    }
+    if (N != 1) {
+        factors.push_back(N);
+    }
+    return factors;
+}
+
+vi primeFactors3(ll N) {
+    vi factors;
+    ll PF_idx = 0, PF = primes[PF_idx];
+    while (N != 1 && (PF * PF <= N)) {
+        if (N % PF == 0) {
+            N /= PF;
+            factors.push_back(PF);
+            break;
+        }
+        while (N % PF == 0) {
+            N /= PF;
+        }
+        PF = primes[++PF_idx];
+    }
+    if (N != 1) {
+        factors.push_back(N);
+    }
+    return factors;
+}
+
+vi primeFactors4(ll N) {
+    vi factors;
+
+    ll PF_idx = 0;
+    ll PF=primes[0];
+    while (!(N%2)) {
+        while (N % PF == 0) {
+            N /= PF;
+            //factors.push_back(PF);
+        }
+    }
+    PF_idx = 1, PF = primes[PF_idx];
+    while (N != 1 && (PF * PF <= N)) {
+        while (N % PF == 0) {
+            N /= PF;
+            factors.push_back(PF);
+        }
+        PF = primes[++PF_idx];
+    }
+    
+    if (N > 2) {
+        factors.push_back(N);
+    }
+    return factors;
+}
+
+
+/*int binary_search(int k) {
+    int d = 0;
+    int b = 28;
+    int c = 14;
+    while(b != d) {
+        if (a[c] )
+    }
+
+}*/
+
+
+typedef struct no *p_no;
+
+struct no {
+    char dado;
+    p_no prox;
+    p_no ant;
+    p_no fim;
+    p_no inicio;
+};
+
+p_no criar_lista() {
+    return NULL;
+}
+
+void destruir_lista(p_no lista) {
+    if (lista != NULL) {
+        destruir_lista(lista->prox);
+        free(lista);
+    }
+}
+
+p_no adicionar_elemento(p_no lista, char x) {
+    p_no novo;
+    novo = new no;
+    novo->dado = x;
+    novo->prox = lista;
+    if (lista != NULL) {
+        lista->ant = novo;
+    }
+    novo->ant = NULL;
+    if (lista == NULL) {
+        novo->fim=novo;
+    } else {
+        novo->fim=lista->fim;
+    }
+    return novo;
+}
+
+p_no remover_elemento(p_no elem) {
+    if (elem->prox != NULL) {
+        elem->prox->ant = elem->ant;
+    }
+    if (elem->ant != NULL) {
+        elem->ant->prox = elem->prox;
+    }
+    p_no pro = elem->prox;
+    free(elem);
+    return pro;
+}
+
+/*
+void visit(int* d, vector<int> v[], int j, int* m) {
+    (*d)++;
+    for (int i = 0; i < v[j].size(); i++) {
+        visit(d, v, v[j][i], m);
+    }
+    if (*d > *m) {
+        *m = *d;
+    }
+    (*d)--;
+}
+
+ll calculate(string s, int i) {
+    ll d = 0;
+    if (i == s.length() - 1) {
+        return s[i]=='9' ? 1 : 0;
+    }
+    //c[s.length()-i]='\0';
+    string s2 = s.substr(i+1, s.length()-i-1);
+
+    for (int i = 0; i < s2.length(); i++) {
+        s2[i]='9';
+    }
+    d += (s[i]-'0') * calculate(s2,0);
+    d += calculate(s, i + 1);
+    
+    return d;
+
+}
+
+ll lcm(ll a, ll b) {
+    return (a / gcd(a,b)) * b;
+}
+*/
+// typedef vector<char> vc;
+
+// int sobra(int a[], int i, int n, int k) {
+//     //int k = n - i + 1;
+//     int m = i-1;
+//     int t = n - i + 1;
+//     for (; i < n; i++) {
+//         if (a[i] - a[i-1] > k) {
+//             int j = sobra(a, i+1, n, k);
+//             if (j > (i-m)) {
+//                 //t = t - (i-m);
+//                 return j;
+//             } else {
+//                 return (i-m);
+//                 //break;
+//             }
+//             //break;
+//         }
+//     }
+//     return t;
+// }
+/*
+std::sort(population.begin(), population.end(), [](people* a, people* b) {
+    if (a->name != b->name) return a->name < b->name;
+    return a->city < b->city;
+});
+
+std::sort(population.begin(), population.end(),
+    [](auto& p1, auto& p2) {
+        return std::tie(p1->name, p1->city) < std::tie(p2->name, p2->city); 
+    });*/
+
+
+
+
+
+// int a[200000];
+
+//int c[100000];
+
+int calculate(int a[], int i, int t, int n) {
+    t += a[i];
+    if (i == n-1) {
+        if (!(t%360)) {
+            return 1;
+        } else {
+            t -= 2 * a[i];
+            if (!(t%360)) {
+                return 1;
+            }
+            return 0;
+        }
+    }
+    int r = calculate(a, i+1, t, n);
+    if (r == 0) {
+        t -= 2*a[i];
+        r = calculate(a,i+1,t,n);
+        if (r == 0) {
+            return 0;
+        } else {
+            return 1;
+        }
+    } else {
+        return r;
+    }
+
+}
+typedef vector<ll> vll;
+
+
+void walk(string s[], int i, int j, int n) {
+    // if(y[i][j]) {
+    //     return;
+    // }
+    //y[i][j]=1;
+    // if (((i + 1) < n) && (s[i+1][j]=='1')) {
+    //     walk(s,i+1,j,n);
+    // } 
+    if (((i-1) > -1) && (s[i-1][j]=='1')) {
+        walk(s,i-1,j,n);
+    } 
+    // if (((j+1)<n) && (s[i][j+1]-'0')) {
+    //     walk(s,i,j+1,n);
+    // } 
+    if (((j-1) >-1) && (s[i][j-1]-'0')) {
+        walk(s,i,j-1,n);
+    }
+    
+}
+int sum(string s) {
+    int t= 0;
+    for (auto &e : s) {
+        t += e - '0';
+    }
+    return !(t%4);
+}
+
+
+ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
+    if (i+s == n) {
+        return p2[i-1];
+    }
+    //p2[i-1];
+
+    ll ac = 0;
+
+    for (int j = 1; (j < (d-1)) && ((i + s+j) <= n); j++) {
+        ac = (ac + sum(p2, d, j, n, s+i)) % 1000000007;
+    } 
+    return (p2[i-1]*ac) % 1000000007;
+}
+// void insert(list<int>::iterator a[], int b) {
+//     if (b < *(a[0])) {
+//         a[2] = a[1];
+//         a[1] = a[0];
+//         a[0] = b;
+//     } else if (b < a[1]) {
+//         a[2] = a[1];
+//         a[1] = b;
+//     } else {
+//         a[2] = b;
+//     }
+// }
+
+
+#define CON 1000000007
+int main() {
+    string s;
+    cin >> s;
+    ll b =0, s2 = 0, c = 0;
+    for (int i = 0; i < s.size() ;i++) {
+        if (s[i] == 'B') {
+            b++;
+        } else if (s[i] == 'S') {
+            s2++;
+        } else {
+            c++;
+        }
+    }
+    int nb, ns, nc;
+    cin >> nb >> ns >> nc;
+    ll pb,ps,pc;
+    cin >> pb >> ps >> pc;
+    ll r;
+    cin >> r;
+    if (b || s2 || c) {
+        ll t = __LONG_LONG_MAX__;
+        if (b != 0) {
+            t = min(t, nb/b);
+        }
+        if (s2 != 0) {
+            t = min(t, ns/s2);
+        }
+        if ( c!=0){
+            t = min(t,nc/c);
+        }
+        //t = min(nb/b, (ll) min(ns/s2, nc/c));
+        nb -= t * b;
+        ns -= t*s2;
+        nc -= t*c;
+
+        ll t2 = 0;
+        tuple<ll,ll,ll,ll> a[3];
+        if (b != 0) {
+            a[0] = make_tuple(nb/b, nb, b, pb);
+        } else {
+            a[0] = make_tuple(LONG_LONG_MAX, nb, b, pb);
+        }
+        if (s2 != 0) {
+            a[1] = make_tuple(ns/s2, ns, s2, ps);
+        } else {
+            a[1] = make_tuple(LONG_LONG_MAX, ns, s2, ps);
+        }
+        if (c != 0) {
+            a[2] = make_tuple(nc/c, nc, c, pc);
+        } else {
+            a[2] = make_tuple(LONG_LONG_MAX, nc, c, pc);
+        }
+        sort(a, a+3);
+        t2 += (get<2>(a[0]) - get<1>(a[0]))*get<3>(a[0]);
+        a[0] = make_tuple(1, get<2>(a[0]), get<2>(a[0]), get<3>(a[0]));
+        while (true) {
+            if (get<0>(a[1]) == 0) {
+                t2 += (get<2>(a[1]) - get<1>(a[1])) * get<3>(a[1]);
+                a[1] = make_tuple(1, get<2>(a[1]), get<2>(a[1]), get<3>(a[1]));
+            }
+            if (get<0>(a[2]) == 0) {
+                t2 += (get<2>(a[2]) - get<1>(a[2])) * get<3>(a[2]);
+                a[2] = make_tuple(1, get<2>(a[2]), get<2>(a[2]), get<3>(a[2]));
+            }
+            r -= t2;
+            if (r < 0) {
+                break;
+            } 
+            a[0] = make_tuple(0, 0, get<2>(a[0]), get<3>(a[0]));
+            a[1] = make_tuple(get<0>(a[1])-1, get<1>(a[1])-get<2>(a[1]), get<2>(a[1]), get<3>(a[1]));
+            a[2] = make_tuple(get<0>(a[2])-1, get<1>(a[2]) -get<2>(a[2]), get<2>(a[2]), get<3>(a[2]));
+            t++;
+            t2 = 0;
+            if (get<0>(a[0]) < get<0>(a[1])) {
+                ll t3 = r / (get<3>(a[0])*get<2>(a[0]));
+                if (t3 > get<0>(a[1])-get<0>(a[0])) {
+                    t3 = get<0>(a[1])-get<0>(a[0]);
+                }
+                t2 = get<3>(a[0]) * t3;
+                r -= t2;
+                t += t3;
+                //t2 += b*(get<)
+            }
+            
+            if (get<2>(a[1]) != 0) {
+                ll n1 = get<1>(a[1]) % get<2>(a[1]);
+                t2 = (get<2>(a[1]) - n1) * get<3>(a[1]);
+                t2 += get<2>(a[0])*get<3>(a[0]);
+                r -= t2;
+                if (r < 0) {
+                    break;
+                }
+                
+                if ((get<0>(a[2])) == get<0>(a[1])) {
+                    ll n1 = get<1>(a[2]) % get<2>(a[2]);
+                    t2 = (get<2>(a[2])-n1) * get<3>(a[2]);
+                    r -= t2;
+                    if (r < 0) {
+                        break;
+                    }
+                    a[2] = make_tuple(get<0>(a[2]), 0, get<2>(a[2]), get<3>(a[2]));
+                }
+                t++;
+
+                if ((get<0>(a[2]) != get<0>(a[1]))) {
+                    ll t3 = r/(get<3>(a[1])*get<2>(a[1]) + get<3>(a[0])*get<2>(a[0]));
+                    t3 = min(get<0>(a[2]) - get<0>(a[1]) -1, t3);
+                    r -= t3 * (get<3>(a[1])*get<2>(a[1]) + get<3>(a[0])*get<2>(a[0]));
+                    t += t3;
+                }
+
+                if (get<2>(a[2]) != 0) {
+                    n1 = get<1>(a[2]) % get<2>(a[2]);
+                    t2 = get<3>(a[0])*get<2>(a[0]) + get<3>(a[1]) * get<2>(a[1]);
+                    t2 += (get<2>(a[2])-n1)*get<3>(a[2]);
+                    r -= t2;
+                    if (r < 0) {
+                        break;
+                    }
+                    t++;
+                    t2 = get<3>(a[0])*get<2>(a[0]) + get<3>(a[1]) * get<2>(a[1]) + get<3>(a[2])*get<2>(a[2]);
+                    t += r / (t2);
+                
+
+                    break;
+                } else{
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        cout << t EN;
+    } 
+   
+        
+        
+    
+    
+    
+    
+    
+   
+   
+
+   
+
+    
+           
+    
+}
+
+    
+
+    
+
+
+    
+
+
+
+    
+    
+    
+
+
+    
+
+  
+    
+    
+    
+    
+    
+   
+
+
+    
+  
+
+
