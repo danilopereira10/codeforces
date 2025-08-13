@@ -32,7 +32,7 @@ typedef vector<string> vs;
 
 
 ll _sieve_size;
-bitset <2602> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -371,41 +371,86 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 int main() {
     int t;
     cin >> t;
-    for (int i = 0;i < t;i++) {
-        int n;
-        cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
-        }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
-        }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
+    for (int k = 0; k < t; k++) {
+        ll n,a,b;
+        cin >> n >> a >> b;
+        if (b == 1) {
+            YES;
+        } else if (b == 2) {
+            if (n % 2) {
+                YES;
+            } else {
+                if (a % 2) {
+                    NO;
+                } else if (a == 2) {
+                    if ((n % 4) == 2) {
+                        YES;
+                    } else {
+                        NO;
+                    }
+                } else if (a == 1) {
+                    NO;
+                } else {
+                    if (n % a) {
+                        NO;
+                    } else {
+                        while (!(n%a)) {
+                            n /= a;
+                        }
+                        if (n % 2) {
+                            YES;
+                        } else {
+                            NO;
+                        }
+                    }
+                }
+            }
+        } else if (b == 3) {
+            if ((n % 3) == 1) {
+                YES;
+            } else {
+                if ((n % 3) == 0) {
+                    if (n % a) {
+                        NO;
+                    } else {
+                        while (!(n % a)) {
+                            n /= a;
+                            if ((n%b) == 1) {
+                                break;
+                            }
+                        }
+                        if ((n % b) == 1) {
+                            YES;
+                        } else {
+                            NO;
+                        }
+                    }
+                } else {
+                    if (n % a) {
+                        NO;
+                    } else {
+                        while (!(n%a)) {
+                            n /= a;
+                            if ((n%b) == 1) {
+                                break;
+                            }
+                        }
+                        if ((n%b) == 1) {
+                            YES;
+                        } else {
+                            NO;
+                        }
+                    }
+                }
+            }
+        } else {
+            if ((n % b) == 1) {
 
-
-
+            }
+        }
        
         
     }
-
-        
-    
-    
-    
-    
-    
-   
    
 
    

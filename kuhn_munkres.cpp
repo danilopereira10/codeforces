@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -5,7 +6,6 @@
 #include <tuple>
 #include <cstring>
 #include <cstdlib>
-#include <bits/stdc++.h>
 #include <iomanip>
 #include <unordered_map>
 #include <set>
@@ -32,7 +32,7 @@ typedef vector<ll> vll;
 
 
 ll _sieve_size;
-bitset <1003> bs;
+bitset <100002> bs;
 vll primes;
 
 void sieve(ll upperbound) {
@@ -52,7 +52,7 @@ bool isPrime(ll N) {
     return true;
 }
 
-ll gcd(ll a, ll b) {
+int gcd(ll a, ll b) {
     return b == 0 ? a : gcd(b, a % b);
 }
 
@@ -81,7 +81,7 @@ vector<ll> dividers(ll N) {
     ll c = 1;
     //b.push_back(f[0]);
     //ll c = f[0];
-    for (int i = 0 ; i < (int) f.size(); ) {
+    for (int i = 0 ; i < f.size(); ) {
         c = f[i];
         vll d;
         d.push_back(c);
@@ -90,9 +90,9 @@ vector<ll> dividers(ll N) {
             d.push_back(c*d[d.size()-1]);
             i++;
         }
-        int j = (int) b.size();
+        int j = b.size();
         for (int i = 0; i < j; i++) {
-            for (int k = 0; k < (int) d.size(); k++) {
+            for (int k = 0; k < d.size(); k++) {
                 b.push_back(b[i]*d[k]);
             }
         }
@@ -119,8 +119,8 @@ vll primeFactors2(ll N) {
     return factors;
 }
 
-vll primeFactors3(ll N) {
-    vll factors;
+vi primeFactors3(ll N) {
+    vi factors;
     ll PF_idx = 0, PF = primes[PF_idx];
     while (N != 1 && (PF * PF <= N)) {
         if (N % PF == 0) {
@@ -139,8 +139,8 @@ vll primeFactors3(ll N) {
     return factors;
 }
 
-vll primeFactors4(ll N) {
-    vll factors;
+vi primeFactors4(ll N) {
+    vi factors;
 
     ll PF_idx = 0;
     ll PF=primes[0];
@@ -381,147 +381,313 @@ ll sum(ll n, ll p) {
     }
 }
 
-
-
-// int binarySearch(ll arr[], int low, int high, int x)
-// {
-//     int f = 0, l = -1;
-//     while (low <= high) {
-//         int mid = low + (high - low) / 2;
-
-//         // Check if x is present at mid
-//         if (arr[mid] == x) {
-//             return mid;
-//         }
-
-//         // If x greater, ignore left half
-//         if (arr[mid] <= x)
-//             low = mid + 1;
-
-//         // If x is smaller, ignore right half
-//         else {
-//             high = mid - 1;
-//         }
-//     }
-//     if (f) {
-//         return l;
-//     } else {
-//         // If we reach here, then element was not present
-//         return -1;
-//     }
-// }
-
-int binarySearch(ll arr[], int low, int high, int x)
-{
-    int f = 0, l = -1;
-    while (low <= high) {
-        int mid = low + (high - low) / 2;
-
-
-        if (arr[mid] <= x) {
-            f = 1;
-            if (mid > l) {
-                l = mid;
-            }
-            low = mid + 1;
-
-        } else {
-            // If x is smaller, ignore right half 
-            high = mid - 1;
-        }
-    }
-    if (f) {
-        return l;
-    } else {
-        // If we reach here, then element was not present
-        return -1;
-    }
+int digits(int n) {
+	if (n <= 9) {
+		return n+1;
+	} else {
+		int d = (int) (log10(n) + 1);
+		int p = 1;
+		while (p <= n) {
+			p *= 10;
+		}
+		p /= 10;
+		p--;
+		return d * (n - p) + digits(p);
+	}
 }
 
-struct custom_hash {
-    static uint64_t splitmix64(uint64_t x) {
-        // http://xorshift.di.unimi.it/splitmix64.c
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
+ll x2 = 1;
+ll y2 = 0;
+ll d = 1;
+// store x0, y0, and d as global variables
+void extendedEuclid(int a, int b) {
+    if (b == 0) {
+        x2 = 1;
+        y2 = 0;
+        d = a;
+        return;
     }
-
-    size_t operator()(uint64_t x) const {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
-};
-
-typedef map<ll,ll> u;
-using tl = tuple<ll,ll>;
-
-ll d(tuple<ll,ll> l) {
-    return get<0>(l);
-}
-
-ll e(tuple<ll,ll> l) {
-    return get<1>(l);
-}
-
-bool f(tl a, tl b, tl c) {
-    if (e(a) == e(b) || e(a) == e(c) || e(b) == e(c)) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-tl g(ll a, ll b) {
-    return make_tuple(a,b);
+    extendedEuclid(b, a%b);
+    int x1 = y2;
+    int y1 = x2 - (a/b) * y2;
+    x2 = x1;
+    y2 = y1;
 }
 
 
+template<typename T>
+T extended_euclidean(const deque<T> &cof, deque<T> &var) {
+	int n = cof.size();
+	if (!cof.back()) {
+		int cnt = 0, id = 0;
+		for (int i = 0; i < n; i++)
+			if (!cof[i]) {
+				cnt++;
+				var[i] = 0;
+			} else
+				id = i;
+		if (cnt >= n - 1) {
+			var[id] = 1;
+			return cof[id];
+		}
+		deque<T> new_cof, new_var;
+		for (int i = 0; i < n; i++)
+			if (cof[i]) {
+				new_cof.push_back(cof[i]);
+				new_var.push_back(var[i]);
+			}
+		T g = extended_euclidean(new_cof, new_var);
+		for (int i = 0; !new_var.empty(); i++)
+			if (cof[i]) {
+				var[i] = new_var.front();
+				new_var.pop_front();
+			}
+		return g;
+	}
+	deque<T> new_cof = cof;
+	for (int i = 0; i < n - 1; i++)
+		new_cof[i] %= new_cof.back();
+	new_cof.push_front(new_cof.back());
+	new_cof.pop_back();
+	var.push_front(var.back());
+	var.pop_back();
+	T g = extended_euclidean(new_cof, var);
+	var.push_back(var.front());
+	var.pop_front();
+	for (int i = 0; i < n - 1; i++)
+		var.back() -= cof[i] / cof.back() * var[i];
+	return g;
+}
 
+vector<ll> find_any_solution(const vector<ll> &cof, ll rhs) {
+	int n = cof.size();
+	if (!n)
+		return vector<ll>();
+	deque<ll> deque_cof(cof.begin(), cof.end()), deque_var(n);
+	ll g = extended_euclidean(deque_cof, deque_var);
+	if (g && rhs % g)
+		return vector<ll>();
+	vector<ll> var(deque_var.begin(), deque_var.end());
+	if (g) {
+		rhs /= g;
+		for (auto &it : var)
+			it *= rhs;
+	}
+	return var;
+}
 
 #define CON 1000000007
 int main() {
-    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-    int t;
-    cin >> t;
-    for (int i = 0; i < t; i++) {
-        int n;
-        cin >> n;
-        ll a[n];
-        u b;
-        ll t[2] = {0, 0};
-        b[0] = 1;
-        int f = 0;
-        
-        ll t3 = 0;
-        for (int i = 0; i < n; i++) {
-            cin >> a[i];
-            t3 += i % 2 ? -a[i] : a[i];
-            if (b[t3]) {
-                f = 1;
+    int n;
+    cin >> n;
+    int matrix[n][n];
+    set<int> nei[n];
+    set<int> unsaturated;
+    for (int i = 0;i < n; i++) {
+        unsaturated.insert(i);
+        // unsaturated.insert(i+n);
+    }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> matrix[i][j];
+        }
+    }
+
+    int li[n];
+    int c[n];
+    for (int i = 0; i < n; i++) {
+        li[i] = matrix[i][0];
+        c[i] = 0;
+        for (int j = 1; j < n; j++) {
+            li[i] = max(li[i], matrix[i][j]);
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if(matrix[i][j] == li[i]) {
+                nei[i].insert(j+n);
+                //nei[j+n].insert(i);
+            }
+        }
+    }
+
+    // int vl[n];
+    // int vc[n];
+
+    // for (int i = 0; i < n; i++) {
+    //     vl[i] = 0;
+    //     vc[i] = 0;
+    // }
+
+    int ma[n][n];
+    for (int i = 0; i < n;i++) {
+        for (int j = 0; j < n; j++) {
+            ma[i][j] = 0;
+        }
+    }
+
+    int matc[n][n];
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            matc[i][j] = 0;
+        }
+    }
+
+    int matchings = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if ((matrix[i][j] == li[i]) && (unsaturated.find(i) != unsaturated.end())) {
+            // if ((matrix[i][j] == li[i]) && (vl[i] == 0) && (vc[i] == 0)) {    
+                // vl[i] = 1;
+                // vc[j] = 1;
+                ma[i][j] = 1;
+                unsaturated.erase(i);
+                matchings++;
                 break;
             }
-            b[t3] = 1;
-            t[i%2] += a[i];
-            if (b[t[i%2]-t[1-i%2]]) {
-                f = 1;
-                break;
+        }
+    }
+    while (true) {
+        if (matchings == n) {
+            break;
+        } else {
+            int in = -1;
+            for (int i = 0;i < n; i++) {
+                if (vl[i] == 0) {
+                    in = i;
+                    break;
+                }
             }
-            if (i %  2) {
-                b[-t[i%2]+t[i%2]]=1;
+            // if (in == -1) {
+            //     for (int i = 0; i < n; i++) {
+            //         if (vc[i] == 0) {
+            //             in = i + n;
+            //         }
+            //     }
+            // }
+            set<int> s;
+            s.insert(in);
+            set<int> t;
+
+            if (std::includes(t.begin(), t.end(), 
+                nei[in].begin(), nei[in].end())) {
+
+            // ...
             } else {
-                b[t[i%2]-t[1-i%2]] = 1;
+                int alpha_l = INT_MAX;
+                for (auto itr : s) {
+                    for (int i = 0; i < n && (t.find(i) == t.end()); i++) {
+                        alpha_l = min(alpha_l, li[itr] + c[i] - matrix[itr][i]);
+                    }
+                    // cout << itr << " ";
+                }  
+
+                for (auto itr : s) {
+                    li[itr] = li[itr] - alpha_l;
+                }  
+
+                for (auto itr : t) {
+                    c[itr] = c[itr] + alpha_l;
+                }
+
+                for (int i = 0; i < n; i++) {
+                    nei[i].clear();
+                }nei[i].ins
+
+
+
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < n; j++) {
+                        if(matrix[i][j] == li[i]) {
+                            nei[i].insert(j+n);
+                            // nei[j+n].insert(i);
+                        }
+                    }
+                }
+
+    int vl[n];
+    int vc[n];
+
+    for (int i = 0; i < n; i++) {
+        vl[i] = 0;
+        vc[i] = 0;
+    }
+
+    int ma[n][n];
+    for (int i = 0; i < n;i++) {
+        for (int j = 0; j < n; j++) {
+            ma[i][j] = 0;
+        }
+    }
+
+    int matc[n][n];
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            matc[i][j] = 0;
+        }
+    }
+
+    int matchings = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if ((matrix[i][j] == li[i]) && (vl[i] == 0) && (vc[i] == 0)) {
+                vl[i] = 1;
+                vc[j] = 1;
+                ma[i][j] = 1;
+                matchings++;
+                break;
+            }
+        }
+    }
+
+                set<int> tc;
+                for (int i = 0; i < n; i++) {
+
+                }
+                
+                
             }
 
         }
-        if (f) {
-            yes;
-        } else {
-            no;
-        }
-        
-       
     }
- 
-   
+
+    for (int i = 0; i < n; i++) {
+        li[i] = 0;
+        c[i] = 0;
+        for (int j = 0; j < n; j++) {
+            li[i] += matrix[i][j];
+        }
+    }
+
+
+
+    vector<int> vertex;
+    vector<vector<int>> edges;
+    set<int> S;
+    set<int> T;
+    int t;
+    cin >> t;
+    for (int i = 0; i < t; i++) {
+        int a,b;
+        cin >> a >> b;
+        if (a % 2) {
+            no;
+        } else {
+            if (b % 2) {
+                if (a >= 2) {
+                    yes;
+                } else {
+                    no;
+                }
+            } else {
+                yes;
+            }
+        }
+       
+        
+        
+    }
+    
+    
 }

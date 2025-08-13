@@ -26,13 +26,13 @@ typedef vector<string> vs;
 #define YES cout << "YES" << endl;
 #define NO cout << "NO" << endl;
 #define CI cin >>
-#define CO cout <<
-#define EN << endl;
+#define co cout <<
+#define en << endl;
 
 
 
 ll _sieve_size;
-bitset <2602> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -371,41 +371,36 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 int main() {
     int t;
     cin >> t;
-    for (int i = 0;i < t;i++) {
-        int n;
-        cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+    for (int k2 = 0; k2 < t; k2++) {
+        int n, k;
+        cin >> n >> k;
+        ll a[n], b[n];
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+            b[i] = a[i];
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
+        if (k > 1) {
+            YES;
+        } else {
+            sort(b, b+n);
+            int f = 0;
+            for (int i = 0; i < n; i++) {
+                if (a[i] != b[i]) {
+                    f = 1;
+                    break;
+                }
+            }
+            if (f) {
+                NO;
+            } else {
+                YES;
+            }
         }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
+        
 
 
-
-       
         
     }
-
-        
-    
-    
-    
-    
-    
-   
    
 
    

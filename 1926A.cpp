@@ -372,13 +372,22 @@ int main() {
     int t;
     cin >> t;
     for (int i = 0;i < t;i++) {
-        int n,m;
-        cin >> n >> m;
-        if (!(m%2)) {
-            cout << n*m/2 EN;
-        } else {
-            cout << n*(m-3)/2 + n EN;
+        string s;
+        cin >> s;
+        int a=0,b=0;
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] == 'A') {
+                a++;
+            } else {
+                b++;
+            }
         }
+        if (a > b) {
+            cout << "A" EN;
+        } else {
+            cout << "B" EN;
+        }
+        
     }
 
         

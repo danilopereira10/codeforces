@@ -26,13 +26,13 @@ typedef vector<string> vs;
 #define YES cout << "YES" << endl;
 #define NO cout << "NO" << endl;
 #define CI cin >>
-#define CO cout <<
-#define EN << endl;
+#define co cout <<
+#define en << endl;
 
 
 
 ll _sieve_size;
-bitset <2602> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -371,41 +371,57 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 int main() {
     int t;
     cin >> t;
-    for (int i = 0;i < t;i++) {
+    for (int k = 0; k < t; k++) {
         int n;
         cin >> n;
-        stringstream ss;
+        string s;
+        cin >> s;
+        ll t = 0;
+        ll p[n];
+        for (int i = 0; i < n; i++) {
+            p[i] = 0;
+            if (s[i] == 'L') {
+                t += i;
+            } else {
+                t += n - (i+1);
+            }
+        }
         int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
+        int j = 0, j2 = n - 1;
+        while (true) {
+            if (s[j] == 'L') {
+                p[c] = (n - (j+1)) - j;
+                c++;
+            }
+            j++;
+            if (j > j2) {
+                break;
+            }
+            if (s[j2] == 'R') {
+                p[c] = j2 - (n - (j2 + 1));
+                c++;
+            }
+            j2--;
+            if (j2 <= j) {
+                break;
+            }
+        }
+        while (c < n) {
+            p[c] = 0;
             c++;
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
+        p[0] = p[0] + t;
+        for (int i = 1; i < n; i++) {
+            p[i] = p[i] + p[i-1];
         }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
+        for (int i = 0; i < n; i++) {
+            cout << p[i] << " ";
         }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
-
-
-
+        cout en;
+        
        
         
     }
-
-        
-    
-    
-    
-    
-    
-   
    
 
    

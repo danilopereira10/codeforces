@@ -22,18 +22,19 @@ typedef vector<tuple<int,int>> vti;
 stack<tuple<int, int, int>> num;/*  */
 stack<tuple<int, int, int>> num2;
 typedef vector<string> vs;
+typedef vector<ll> vll;
 
-#define YES cout << "YES" << endl;
-#define NO cout << "NO" << endl;
+#define yes cout << "YES" << endl;
+#define no cout << "NO" << endl;
 #define CI cin >>
-#define CO cout <<
-#define EN << endl;
+#define co cout <<
+#define en << endl;
 
 
 
 ll _sieve_size;
-bitset <2602> bs;
-vi primes;
+bitset <100002> bs;
+vll primes;
 
 void sieve(ll upperbound) {
     _sieve_size = upperbound + 1;
@@ -41,7 +42,7 @@ void sieve(ll upperbound) {
     bs[0] = bs[1] = 0;
     for (ll i = 2; i <= _sieve_size; i++) if (bs[i]) {
         for (ll j = i * i; j <= _sieve_size; j += i) bs[j] = 0;
-        primes.push_back((int) i);
+        primes.push_back((ll) i);
     }
 }
 
@@ -52,13 +53,13 @@ bool isPrime(ll N) {
     return true;
 }
 
-int gcd(int a, int b) {
+int gcd(ll a, ll b) {
     return b == 0 ? a : gcd(b, a % b);
 }
 
 
-vi primeFactors(ll N) {
-    vi factors;
+vll primeFactors(ll N) {
+    vll factors;
     ll PF_idx = 0, PF = primes[PF_idx];
     while (N != 1 && (PF * PF <= N)) {
         while (N % PF == 0) {
@@ -73,9 +74,9 @@ vi primeFactors(ll N) {
     return factors;
 }
 
-vi dividers(ll N) {
-    vi f = primeFactors(N);
-    vi b;
+vector<ll> dividers(ll N) {
+    vll f = primeFactors(N);
+    vector<ll> b;
     
     b.push_back(1);
     ll c = 1;
@@ -83,7 +84,7 @@ vi dividers(ll N) {
     //ll c = f[0];
     for (int i = 0 ; i < f.size(); ) {
         c = f[i];
-        vi d;
+        vll d;
         d.push_back(c);
         i++;
         while (c == f[i]) {
@@ -100,8 +101,8 @@ vi dividers(ll N) {
     return b;
 }
 
-vi primeFactors2(ll N) {
-    vi factors;
+vll primeFactors2(ll N) {
+    vll factors;
     ll PF_idx = 0, PF = primes[PF_idx];
     while (N != 1 && (PF * PF <= N)) {
         if (N % PF == 0) {
@@ -309,7 +310,7 @@ int calculate(int a[], int i, int t, int n) {
     }
 
 }
-typedef vector<ll> vll;
+
 
 
 void walk(string s[], int i, int j, int n) {
@@ -366,81 +367,255 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 //     }
 // }
 
+ll sum(ll n, ll p) {
+    if (n <= 9) {
+        return (n * (n+1)) / 2;
+    } else {
+        ll d = n / p;
+        ll s = (p * d) - 1;
+        ll p2 = p;
+        ll p3 = p;
+        while (p2 > (n-s-1)) {
+            p2 /= 10;
+        }
+        return (n - s) * d + sum(n - s-1, p2) + (d-1)*(d)/2 * (p3)  + sum(p3-1, p3/10) ; 
+    }
+}
+
+int digits(int n) {
+	if (n <= 9) {
+		return n+1;
+	} else {
+		int d = (int) (log10(n) + 1);
+		int p = 1;
+		while (p <= n) {
+			p *= 10;
+		}
+		p /= 10;
+		p--;
+		return d * (n - p) + digits(p);
+	}
+}
+
+ll x2 = 1;
+ll y2 = 0;
+ll d = 1;
+// store x0, y0, and d as global variables
+void extendedEuclid(int a, int b) {
+    if (b == 0) {
+        x2 = 1;
+        y2 = 0;
+        d = a;
+        return;
+    }
+    extendedEuclid(b, a%b);
+    int x1 = y2;
+    int y1 = x2 - (a/b) * y2;
+    x2 = x1;
+    y2 = y1;
+}
+
+
+template<typename T>
+T extended_euclidean(const deque<T> &cof, deque<T> &var) {
+	int n = cof.size();
+	if (!cof.back()) {
+		int cnt = 0, id = 0;
+		for (int i = 0; i < n; i++)
+			if (!cof[i]) {
+				cnt++;
+				var[i] = 0;
+			} else
+				id = i;
+		if (cnt >= n - 1) {
+			var[id] = 1;
+			return cof[id];
+		}
+		deque<T> new_cof, new_var;
+		for (int i = 0; i < n; i++)
+			if (cof[i]) {
+				new_cof.push_back(cof[i]);
+				new_var.push_back(var[i]);
+			}
+		T g = extended_euclidean(new_cof, new_var);
+		for (int i = 0; !new_var.empty(); i++)
+			if (cof[i]) {
+				var[i] = new_var.front();
+				new_var.pop_front();
+			}
+		return g;
+	}
+	deque<T> new_cof = cof;
+	for (int i = 0; i < n - 1; i++)
+		new_cof[i] %= new_cof.back();
+	new_cof.push_front(new_cof.back());
+	new_cof.pop_back();
+	var.push_front(var.back());
+	var.pop_back();
+	T g = extended_euclidean(new_cof, var);
+	var.push_back(var.front());
+	var.pop_front();
+	for (int i = 0; i < n - 1; i++)
+		var.back() -= cof[i] / cof.back() * var[i];
+	return g;
+}
+
+vector<ll> find_any_solution(const vector<ll> &cof, ll rhs) {
+	int n = cof.size();
+	if (!n)
+		return vector<ll>();
+	deque<ll> deque_cof(cof.begin(), cof.end()), deque_var(n);
+	ll g = extended_euclidean(deque_cof, deque_var);
+	if (g && rhs % g)
+		return vector<ll>();
+	vector<ll> var(deque_var.begin(), deque_var.end());
+	if (g) {
+		rhs /= g;
+		for (auto &it : var)
+			it *= rhs;
+	}
+	return var;
+}
 
 #define CON 1000000007
 int main() {
-    int t;
-    cin >> t;
-    for (int i = 0;i < t;i++) {
-        int n;
-        cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+    int n;
+    cin >> n;
+    int matrix[n][n];
+    set<int> nei[2*n];
+    set<int> unsaturated;
+    for (int i = 0;i < n; i++) {
+        unsaturated.insert(i);
+        unsaturated.insert(i+n);
+    }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> matrix[i][j];
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
-        }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
-
-
-
-       
-        
     }
 
+    int li[n];
+    int c[n];
+    for (int i = 0; i < n; i++) {
+        li[i] = matrix[i][0];
+        c[i] = 0;
+        for (int j = 1; j < n; j++) {
+            li[i] = max(li[i], matrix[i][j]);
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if(matrix[i][j] == li[i]) {
+                nei[i].insert(j+n);
+                nei[j+n].insert(i);
+            }
+        }
+    }
+
+    int vl[n];
+    int vc[n];
+
+    for (int i = 0; i < n; i++) {
+        vl[i] = 0;
+        vc[i] = 0;
+    }
+
+    int ma[n][n];
+    for (int i = 0; i < n;i++) {
+        for (int j = 0; j < n; j++) {
+            ma[i][j] = 0;
+        }
+    }
+
+    int matc[n][n];
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            matc[i][j] = 0;
+        }
+    }
+
+    int matchings = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if ((matrix[i][j] == li[i]) && (vl[i] == 0) && (vc[i] == 0)) {
+                vl[i] = 1;
+                vc[j] = 1;
+                ma[i][j] = 1;
+                matchings++;
+                break;
+            }
+        }
+    }
+    while (true) {
+        if (matchings == n) {
+            break;
+        } else {
+            int in = -1;
+            for (int i = 0;i < n; i++) {
+                if (vl[i] == 0) {
+                    in = i;
+                    break;
+                }
+            }
+            if (in == -1) {
+                for (int i = 0; i < n; i++) {
+                    if (vc[i] == 0) {
+                        in = i + n;
+                    }
+                }
+            }
+            set<int> s;
+            s.insert(in);
+            set<int> t;
+
+            if (std::includes(nei[in].begin(), nei[in].end(),
+                  t.begin(), t.end())) {
+
+            // ...
+            } else {
+                
+            }
+
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        li[i] = 0;
+        c[i] = 0;
+        for (int j = 0; j < n; j++) {
+            li[i] += matrix[i][j];
+        }
+    }
+
+
+
+    vector<int> vertex;
+    vector<vector<int>> edges;
+    set<int> S;
+    set<int> T;
+    int t;
+    cin >> t;
+    for (int i = 0; i < t; i++) {
+        int a,b;
+        cin >> a >> b;
+        if (a % 2) {
+            no;
+        } else {
+            if (b % 2) {
+                if (a >= 2) {
+                    yes;
+                } else {
+                    no;
+                }
+            } else {
+                yes;
+            }
+        }
+       
         
+        
+    }
     
-    
-    
-    
-    
-   
-   
-
-   
-
-    
-           
     
 }
-
-    
-
-    
-
-
-    
-
-
-
-    
-    
-    
-
-
-    
-
-  
-    
-    
-    
-    
-    
-   
-
-
-    
-  
-
-

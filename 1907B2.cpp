@@ -32,7 +32,7 @@ typedef vector<string> vs;
 
 
 ll _sieve_size;
-bitset <2602> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -369,33 +369,55 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 
 #define CON 1000000007
 int main() {
+    //sieve(33000);
     int t;
     cin >> t;
     for (int i = 0;i < t;i++) {
-        int n;
-        cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+        string s;
+        cin >> s;
+        list<int> a,b;
+        unordered_map<int,int> c;
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] <= 'Z') {
+                if (s[i] == 'B') {
+                    c[i] = 1;
+                    if (!a.empty()) {
+                        int d = a.back();
+                        c[d] = 1;
+                        a.pop_back();
+                    }
+                    
+                } else {
+                    a.push_back(i);
+                }
+            } else {
+                if (s[i] == 'b') {
+                    c[i] = 1;
+                    if (!b.empty()) {
+                        int d = b.back();
+                        c[d] = 1;
+                        b.pop_back();
+                    }
+                    
+                } else {
+                    b.push_back(i);
+                }
+            }
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
+        for (int i = 0; i < s.size(); i++) {
+            if (!c[i]) {
+                cout << s[i];
+            }
         }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
+        cout EN;
+        
 
 
-
+        
        
+      
+        
+        
         
     }
 

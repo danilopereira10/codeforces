@@ -372,30 +372,30 @@ int main() {
     int t;
     cin >> t;
     for (int i = 0;i < t;i++) {
+    
         int n;
-        cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+        cin >> n; 
+        ll a[n];
+        int a0 = 0, b = 0, c = 0;
+        ll s = 0;
+        for (auto &e : a) {
+            cin >> e;
+            s += e;
+            if ((e % 3) == 1) {
+                c = 1;
+            }
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
+        s = s % 3;
+        if ((s % 3) == 0) {
+            cout << s EN;
+        } else if ((s%3) == 2) {
+            cout << 1 EN;
+        } else if (c == 1) {
+            cout << 1 EN;
+        } else {
+            cout << 2 EN;
         }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
 
-
-
-       
         
     }
 

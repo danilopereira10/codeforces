@@ -32,7 +32,7 @@ typedef vector<string> vs;
 
 
 ll _sieve_size;
-bitset <2602> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -369,33 +369,50 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 
 #define CON 1000000007
 int main() {
+    //sieve(33000);
     int t;
     cin >> t;
-    for (int i = 0;i < t;i++) {
+    for (int k2 = 0;k2 < t;k2++) {
         int n;
         cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+        ll s[n];
+        priority_queue <int, vector<int>, greater<int> > pq;
+        int f = 0;
+        int e = 0;
+        for (auto &e : s) {
+            cin >> e;
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
+
+        for (int i = n - 1; i > - 1; i--) {
+            if (s[i] == 0) {
+                f++;
+            } else {
+                if (e < f) {
+                    pq.push(s[i]);
+                    e++;
+                } else {
+                    if (!pq.empty()) {
+                        int d = pq.top();
+                        if (s[i] > d) {
+                            pq.pop();
+                            pq.push(s[i]);
+                        }
+                    }
+                }
+            }
         }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
+        ll d = 0;
+        while (!pq.empty()) {
+            d += pq.top();
+            pq.pop();
         }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
-
-
-
+        cout << d EN;
        
+       
+       
+      
+        
+        
         
     }
 

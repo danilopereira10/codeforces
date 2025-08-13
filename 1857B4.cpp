@@ -32,7 +32,7 @@ typedef vector<string> vs;
 
 
 ll _sieve_size;
-bitset <2602> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -371,41 +371,32 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 int main() {
     int t;
     cin >> t;
-    for (int i = 0;i < t;i++) {
-        int n;
-        cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+    for (int i = 0; i < t; i++) {
+        ll n, x;
+        cin >> n >> x;
+        ll a[n];
+        for (auto &e : a) {
+            cin >> e;
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
+        sort(a, a+n);
+        int l = 1;
+        ll t = 0;
+        int h = a[0];
+        t += (a[1] - a[0]) * 1;
+        for (int i = 1; i < n; i++) {
+            ll t2 = x - t;
+            ll j2 = t2 / i;
+            
+            ll j = min((a[i]-a[i-1]) * i, j2 * (a[i] - a[i-1]));
+            h += min(j2, a[i]-a[i-1]);
+            if (j2 != (a[i]-a[i-1])) {
+                break;
+            }
+            t += (a[i] - a[i-1]) * j2;
         }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
-
-
-
-       
+        cout << h EN;
         
     }
-
-        
-    
-    
-    
-    
-    
-   
    
 
    

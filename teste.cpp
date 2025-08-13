@@ -1,159 +1,437 @@
-    /* ================================================== AKSHAT AJMERA ================================================== */
-    #include <bits/stdc++.h>
-    using namespace std;
-     
-    using ll = long long;
-    using ld = long double;
-    using ull = unsigned long long;
-     
-    #define fast() ios_base::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL)
-    #define loop(a,begin,end) for(__typeof(begin)a=((begin)-((begin)>(end))); a!=((end)-((begin)>(end))); a+=(1-(2*((begin)>(end)))))
-    // Mathematics macros
-    #define gcd(a,b) __gcd(a,b)
-    #define lcm(a,b)  (a/gcd(a,b))*b
-    // Vector macros
-    #define inputVec(v) loop(a,0,v.size()) {cin >> v[a];}
-    #define outputVec(v) loop(a,0,v.size()) {cout << v[a] << " ";} cout << "\n"
-    #define all(v) v.begin(), v.end()
-    #define rall(v) v.rbegin(), v.rend()
-    // Associative Container macros
-    #define loopc(it, container) for(auto it=container.begin(); it!=container.end(); it++)
-    // Debugger macros
-    #ifndef ONLINE_JUDGE
-        #define debug(x) cerr << '[' << #x << " is " << x << ']' << "\n"
-    #else
-        #define debug(x)
-    #endif
-     
-    const ull mod = 1e9+7;  // 998244353
-    const float PI = 3.141592653589793;
-    const float  E = 2.718281828459045;
-     
-    // Custom Comparator
-    bool comp(const pair<ll,ll> &a, const pair<ll,ll> &b) {
-        if(a.first != b.first) {return (a.first > b.first);}
-        else {return (a.second > b.second);}
+
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <stack>
+#include <tuple>
+#include <cstring>
+#include <cstdlib>
+#include <bits/stdc++.h>
+#include <iomanip>
+#include <unordered_map>
+#include <set>
+#include <algorithm>
+#include <set>
+#include <list>
+
+
+using namespace std;
+typedef long long ll;
+typedef vector<int> vi;
+typedef vector<tuple<int,int>> vti;
+stack<tuple<int, int, int>> num;/*  */
+stack<tuple<int, int, int>> num2;
+typedef vector<string> vs;
+typedef vector<ll> vll;
+
+#define YES cout << "YES" << endl;
+#define NO cout << "NO" << endl;
+#define CI cin >>
+#define co cout <<
+#define en << endl;
+
+
+
+ll _sieve_size;
+bitset <100002> bs;
+vll primes;
+
+void sieve(ll upperbound) {
+    _sieve_size = upperbound + 1;
+    bs.set(); 
+    bs[0] = bs[1] = 0;
+    for (ll i = 2; i <= _sieve_size; i++) if (bs[i]) {
+        for (ll j = i * i; j <= _sieve_size; j += i) bs[j] = 0;
+        primes.push_back((ll) i);
     }
-     
-    // Decimal to Binary
-    string DecToBin(ll x) {
-        string s = "";
-        while(x>0) {
-            ll t = x%2;
-            s.push_back(t+'0');
-            x /= 2; 
+}
+
+bool isPrime(ll N) {
+    if (N <= _sieve_size) return bs[N];
+    for (int i = 0; i < (int)primes.size(); i++)
+        if (N % primes[i] == 0) return false;
+    return true;
+}
+
+int gcd(ll a, ll b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+
+vll primeFactors(ll N) {
+    vll factors;
+    ll PF_idx = 0, PF = primes[PF_idx];
+    while (N != 1 && (PF * PF <= N)) {
+        while (N % PF == 0) {
+            N /= PF;
+            factors.push_back(PF);
         }
-        reverse(all(s));
-        if(s.compare("") == 0) {
-            return "0";
-        }
-        return s;
+        PF = primes[++PF_idx];
     }
-     
-    // Binary to Decimal
-    int BinToDec(string s) {
-        ll ans = 0;
-        ll n = s.size();
-        loop(i,n,0) {
-            if(s[i] == '1') {
-                ans += pow(2,n-i-1);
+    if (N != 1) {
+        factors.push_back(N);
+    }
+    return factors;
+}
+
+vector<ll> dividers(ll N) {
+    vll f = primeFactors(N);
+    vector<ll> b;
+    
+    b.push_back(1);
+    ll c = 1;
+    //b.push_back(f[0]);
+    //ll c = f[0];
+    for (int i = 0 ; i < f.size(); ) {
+        c = f[i];
+        vll d;
+        d.push_back(c);
+        i++;
+        while (c == f[i]) {
+            d.push_back(c*d[d.size()-1]);
+            i++;
+        }
+        int j = b.size();
+        for (int i = 0; i < j; i++) {
+            for (int k = 0; k < d.size(); k++) {
+                b.push_back(b[i]*d[k]);
             }
         }
-        return ans;
     }
-     
-    // Prime Checker
-    void sievePrime(vector<bool> &sieve) {
-        int N = sieve.size()-1;
-        sieve[0] = sieve[1] = false;
-        for(int i=2; i*i<=N; i++) {
-            if(sieve[i]) {
-                for(int j=i*i; j<=N; j+=i) {
-                    sieve[j] = false;
-                }
-            }
+    return b;
+}
+
+vll primeFactors2(ll N) {
+    vll factors;
+    ll PF_idx = 0, PF = primes[PF_idx];
+    while (N != 1 && (PF * PF <= N)) {
+        if (N % PF == 0) {
+            N /= PF;
+            factors.push_back(PF);
+        }
+        while (N % PF == 0) {
+            N /= PF;
+        }
+        PF = primes[++PF_idx];
+    }
+    if (N != 1) {
+        factors.push_back(N);
+    }
+    return factors;
+}
+
+vi primeFactors3(ll N) {
+    vi factors;
+    ll PF_idx = 0, PF = primes[PF_idx];
+    while (N != 1 && (PF * PF <= N)) {
+        if (N % PF == 0) {
+            N /= PF;
+            factors.push_back(PF);
+            break;
+        }
+        while (N % PF == 0) {
+            N /= PF;
+        }
+        PF = primes[++PF_idx];
+    }
+    if (N != 1) {
+        factors.push_back(N);
+    }
+    return factors;
+}
+
+vi primeFactors4(ll N) {
+    vi factors;
+
+    ll PF_idx = 0;
+    ll PF=primes[0];
+    while (!(N%2)) {
+        while (N % PF == 0) {
+            N /= PF;
+            //factors.push_back(PF);
         }
     }
-     
-    bool isPrime(int n) {
-        if(n<2) {return false;}
-        if(n==2) {return true;}
-        for(int i=3; (i*i)<=n; i+=2) {if(!(n%i)) {return true;}}
-        return false;
-    }
-     
-    // Modular Arithmetic
-    ull modPow(ull a, ull b, ull p = mod) {  // power of large numbers using mod
-        ull ans = 1;
-        a %= p;
-        while(b) {
-            if(b & 1) {ans = (ans * a) % p;}
-            a = (a * a) % p;
-            b >>= 1;
+    PF_idx = 1, PF = primes[PF_idx];
+    while (N != 1 && (PF * PF <= N)) {
+        while (N % PF == 0) {
+            N /= PF;
+            factors.push_back(PF);
         }
-        return ans;
+        PF = primes[++PF_idx];
     }
-    ull modInv(ull n, ull p = mod) {return modPow(1ll*n, p-2);}	// using Fermat's Little Theorem
-    ll modAdd(ll a, ll b) {return ((a % mod) + (b % mod)) % mod;}
-    ll modSub(ll a, ll b) {return ((a % mod) - (b % mod) + mod) % mod;}
-    ll modMul(ll a, ll b) {return ((a % mod) * (b % mod)) % mod;}
-    ll modDiv(ll a, ll b) {return ((a % mod) * (modInv(b) % mod)) % mod;}
-     
-    void solve() {
-        ull a, b, r, x=0, abit=0, bbit=0, t;
-        cin >> a >> b >> r;
-        bool f0 = true, f1 = true;
-        if(b > a) {
-            swap(a,b);
-        }
-        loop(i,64,0) {
-            abit = 0;
-            bbit = 0;
-            t = (1LL << i);
-            if(t & a) {
-                abit = 1;
-            }
-            if(t & b) {
-                bbit = 1;
-            }
-            if(abit != bbit) {
-                if((f0 && bbit) || (!f0 && abit)) {
-                    if(x+t <= r) {
-                        x += t;
-                    }
-                    f0 = false;
-                }
-            }
-            else {
-                continue;
-            }
-            if(f1) {
-                if((x & t) && !(r & t)) {
-                    f1 = false;
-                    x &= ~t;
-                }
-            }
-        }
-        cout << ((a^x) - (b^x)) << endl;
-        return;
+    
+    if (N > 2) {
+        factors.push_back(N);
     }
-     
-    main(void) {
-        fast();
-        #ifndef ONLINE_JUDGE
-            freopen("input.txt","r",stdin);
-            freopen("output.txt","w",stdout);
-            freopen("error.txt","w",stderr);
-        #endif
-        clock_t begin = clock();
-        int t;
-        cin >> t;
-        while(t--) {
-            solve();
-        }
-        clock_t end = clock();
-        #ifndef ONLINE_JUDGE
-            cerr << "Time Elapsed: " << (double)(end-begin)/CLOCKS_PER_SEC << " s\n";
-        #endif
-        return 0;
+    return factors;
+}
+
+
+/*int binary_search(int k) {
+    int d = 0;
+    int b = 28;
+    int c = 14;
+    while(b != d) {
+        if (a[c] )
     }
+
+}*/
+
+/*
+typedef struct no *p_no;
+
+struct no {
+    char dado;
+    vector<p_no> prox;
+    p_no ant;
+};
+
+p_no criar_lista() {
+    return NULL;
+}
+
+void destruir_lista(p_no lista) {
+    if (lista != NULL) {
+        //destruir_lista(lista->prox);
+        free(lista);
+    }
+}
+
+p_no adicionar_elemento(p_no lista, char x) {
+    p_no novo;
+    novo = new no;
+    novo->dado = x;
+    //novo->prox = lista;
+    if (lista != NULL) {
+        lista->ant = novo;
+    }
+    novo->ant = NULL;
+    return novo;
+}
+
+
+void visit(int* d, vector<int> v[], int j, int* m) {
+    (*d)++;
+    for (int i = 0; i < v[j].size(); i++) {
+        visit(d, v, v[j][i], m);
+    }
+    if (*d > *m) {
+        *m = *d;
+    }
+    (*d)--;
+}
+
+ll calculate(string s, int i) {
+    ll d = 0;
+    if (i == s.length() - 1) {
+        return s[i]=='9' ? 1 : 0;
+    }
+    //c[s.length()-i]='\0';
+    string s2 = s.substr(i+1, s.length()-i-1);
+
+    for (int i = 0; i < s2.length(); i++) {
+        s2[i]='9';
+    }
+    d += (s[i]-'0') * calculate(s2,0);
+    d += calculate(s, i + 1);
+    
+    return d;
+
+}
+
+ll lcm(ll a, ll b) {
+    return (a / gcd(a,b)) * b;
+}
+*/
+// typedef vector<char> vc;
+
+// int sobra(int a[], int i, int n, int k) {
+//     //int k = n - i + 1;
+//     int m = i-1;
+//     int t = n - i + 1;
+//     for (; i < n; i++) {
+//         if (a[i] - a[i-1] > k) {
+//             int j = sobra(a, i+1, n, k);
+//             if (j > (i-m)) {
+//                 //t = t - (i-m);
+//                 return j;
+//             } else {
+//                 return (i-m);
+//                 //break;
+//             }
+//             //break;
+//         }
+//     }
+//     return t;
+// }
+/*
+std::sort(population.begin(), population.end(), [](people* a, people* b) {
+    if (a->name != b->name) return a->name < b->name;
+    return a->city < b->city;
+});
+
+std::sort(population.begin(), population.end(),
+    [](auto& p1, auto& p2) {
+        return std::tie(p1->name, p1->city) < std::tie(p2->name, p2->city); 
+    });*/
+
+
+
+
+
+// int a[200000];
+
+//int c[100000];
+
+int calculate(int a[], int i, int t, int n) {
+    t += a[i];
+    if (i == n-1) {
+        if (!(t%360)) {
+            return 1;
+        } else {
+            t -= 2 * a[i];
+            if (!(t%360)) {
+                return 1;
+            }
+            return 0;
+        }
+    }
+    int r = calculate(a, i+1, t, n);
+    if (r == 0) {
+        t -= 2*a[i];
+        r = calculate(a,i+1,t,n);
+        if (r == 0) {
+            return 0;
+        } else {
+            return 1;
+        }
+    } else {
+        return r;
+    }
+
+}
+
+
+
+void walk(string s[], int i, int j, int n) {
+    // if(y[i][j]) {
+    //     return;
+    // }
+    //y[i][j]=1;
+    // if (((i + 1) < n) && (s[i+1][j]=='1')) {
+    //     walk(s,i+1,j,n);
+    // } 
+    if (((i-1) > -1) && (s[i-1][j]=='1')) {
+        walk(s,i-1,j,n);
+    } 
+    // if (((j+1)<n) && (s[i][j+1]-'0')) {
+    //     walk(s,i,j+1,n);
+    // } 
+    if (((j-1) >-1) && (s[i][j-1]-'0')) {
+        walk(s,i,j-1,n);
+    }
+    
+}
+int sum(string s) {
+    int t= 0;
+    for (auto &e : s) {
+        t += e - '0';
+    }
+    return !(t%4);
+}
+
+
+ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
+    if (i+s == n) {
+        return p2[i-1];
+    }
+    //p2[i-1];
+
+    ll ac = 0;
+
+    for (int j = 1; (j < (d-1)) && ((i + s+j) <= n); j++) {
+        ac = (ac + sum(p2, d, j, n, s+i)) % 1000000007;
+    } 
+    return (p2[i-1]*ac) % 1000000007;
+}
+// void insert(list<int>::iterator a[], int b) {
+//     if (b < *(a[0])) {
+//         a[2] = a[1];
+//         a[1] = a[0];
+//         a[0] = b;
+//     } else if (b < a[1]) {
+//         a[2] = a[1];
+//         a[1] = b;
+//     } else {
+//         a[2] = b;
+//     }
+// }
+
+ll sum(ll n, ll p) {
+    if (n <= 9) {
+        return (n * (n+1)) / 2;
+    } else {
+        ll d = n / p;
+        ll s = (p * d) - 1;
+        ll p2 = p;
+        ll p3 = p;
+        while (p2 > (n-s-1)) {
+            p2 /= 10;
+        }
+        return (n - s) * d + sum(n - s-1, p2) + (d-1)*(d)/2 * (p3)  + sum(p3-1, p3/10) ; 
+    }
+}
+
+int digits(int n) {
+	if (n <= 9) {
+		return n+1;
+	} else {
+		int d = (int) (log10(n) + 1);
+		int p = 1;
+		while (p <= n) {
+			p *= 10;
+		}
+		p /= 10;
+		p--;
+		return d * (n - p) + digits(p);
+	}
+}
+
+#define CON 1000000007
+int main() {
+    int n;
+    cin >> n;
+    cout << digits(n) << endl;
+    
+}
+
+    
+
+    
+
+
+    
+
+
+
+    
+    
+    
+
+
+    
+
+  
+    
+    
+    
+    
+    
+   
+
+
+    
+  
+
+
+

@@ -26,13 +26,13 @@ typedef vector<string> vs;
 #define YES cout << "YES" << endl;
 #define NO cout << "NO" << endl;
 #define CI cin >>
-#define CO cout <<
-#define EN << endl;
+#define co cout <<
+#define en << endl;
 
 
 
 ll _sieve_size;
-bitset <2602> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -369,43 +369,28 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 
 #define CON 1000000007
 int main() {
-    int t;
-    cin >> t;
-    for (int i = 0;i < t;i++) {
-        int n;
-        cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+    int n, q;
+    cin >> n >> q;
+    ll a[n], t[q];
+    unordered_map<ll,ll> b;
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        if (b[a[i]] == 0) {
+            b[a[i]] = i+1;
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
-        }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
-
-
-
-       
-        
     }
-
-        
+    for (int i = 0; i < q; i++) {
+        cin >> t[i];
+        cout << b[t[i]] << " ";
+        for (int j = 1; j <= 50; j++) {
+            if ((b[j] >= 1) && (b[j] < b[t[i]])) {
+                b[j]++;
+            }
+        }
+        b[t[i]] = 1;
+    }
+    cout en;
     
-    
-    
-    
-    
-   
    
 
    

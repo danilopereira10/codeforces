@@ -32,7 +32,7 @@ typedef vector<string> vs;
 
 
 ll _sieve_size;
-bitset <2602> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -369,33 +369,81 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 
 #define CON 1000000007
 int main() {
+    //sieve(33000);
     int t;
     cin >> t;
-    for (int i = 0;i < t;i++) {
-        int n;
-        cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+    for (int k2 = 0;k2 < t;k2++) {
+        int n,k;
+        cin >> n >> k;
+        int c[n];
+        for (auto &e : c) {
+            cin >> e;
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
-        }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
+        // reverse(c, c+n);
+        
+        if (c[0] != c[n-1]) {
+            int d = c[n-1];
+            int e = 1;
+            int i = n - 2;
+            list<int> a;
+            a.push_front(n-1);
+            for (; i > - 1; i--) {
+                if (c[i] == d) {
+                    e++;
+                    a.push_front(i);
+                    if (e == k) {
+                        i--;
+                        break;
+                    }
+                }
+            }
+            list<int> b;
+            d = c[0];
+            b.push_back(0);
+            int e2 = 1;
+            for (int i = 1; i < a.front(); i++) {
+                if (c[i] == d) {
+                    b.push_back(i);
+                    e2++;
+                    if (e2 == k) {
+                        break;
+                    }
+                }
+            }
+            if (b.back() >= a.front() || e < k || e2 < k) {
+                NO;
+            } else {
+                YES;
+            }
+        } else {
+            if (k > 2) {
+                int d = c[0];
+                k -= 2;
+                int e = 0;
+                for (int i = 1; i < n-1; i++) {
+                    if (c[i] == d) {
+                        e++;
+                        if (e == k) {
+                            break;
+                        }
+                    }
+                }
+                if (e == k) {
+                    YES;
+                } else {
+                    NO;
+                }
 
-
+            } else {
+                YES;
+            }
+        }
 
        
+       
+      
+        
+        
         
     }
 

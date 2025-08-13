@@ -372,30 +372,27 @@ int main() {
     int t;
     cin >> t;
     for (int i = 0;i < t;i++) {
+    
         int n;
-        cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+        cin >> n; 
+        string s;
+        cin >> s;
+        int c = 0, d = 0;
+        for (int i = 1; i < s.size(); i++) {
+            if (s[i] == '@') {
+                c++;
+                d = 0;
+            } else if (s[i] == '*') {
+                d++;
+                if (d == 2) {
+                    break;
+                }
+            } else {
+                d = 0;
+            }
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
-        }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
-
-
-
-       
+        cout << c EN;
+        
         
     }
 

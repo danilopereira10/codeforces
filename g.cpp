@@ -22,18 +22,19 @@ typedef vector<tuple<int,int>> vti;
 stack<tuple<int, int, int>> num;/*  */
 stack<tuple<int, int, int>> num2;
 typedef vector<string> vs;
+typedef vector<ll> vll;
 
-#define YES cout << "YES" << endl;
-#define NO cout << "NO" << endl;
+#define yes cout << "YES" << endl;
+#define no cout << "NO" << endl;
 #define CI cin >>
-#define CO cout <<
-#define EN << endl;
+#define co cout <<
+#define en << endl;
 
 
 
 ll _sieve_size;
-bitset <2602> bs;
-vi primes;
+bitset <100002> bs;
+vll primes;
 
 void sieve(ll upperbound) {
     _sieve_size = upperbound + 1;
@@ -41,7 +42,7 @@ void sieve(ll upperbound) {
     bs[0] = bs[1] = 0;
     for (ll i = 2; i <= _sieve_size; i++) if (bs[i]) {
         for (ll j = i * i; j <= _sieve_size; j += i) bs[j] = 0;
-        primes.push_back((int) i);
+        primes.push_back((ll) i);
     }
 }
 
@@ -52,13 +53,13 @@ bool isPrime(ll N) {
     return true;
 }
 
-int gcd(int a, int b) {
+int gcd(ll a, ll b) {
     return b == 0 ? a : gcd(b, a % b);
 }
 
 
-vi primeFactors(ll N) {
-    vi factors;
+vll primeFactors(ll N) {
+    vll factors;
     ll PF_idx = 0, PF = primes[PF_idx];
     while (N != 1 && (PF * PF <= N)) {
         while (N % PF == 0) {
@@ -73,9 +74,9 @@ vi primeFactors(ll N) {
     return factors;
 }
 
-vi dividers(ll N) {
-    vi f = primeFactors(N);
-    vi b;
+vector<ll> dividers(ll N) {
+    vll f = primeFactors(N);
+    vector<ll> b;
     
     b.push_back(1);
     ll c = 1;
@@ -83,7 +84,7 @@ vi dividers(ll N) {
     //ll c = f[0];
     for (int i = 0 ; i < f.size(); ) {
         c = f[i];
-        vi d;
+        vll d;
         d.push_back(c);
         i++;
         while (c == f[i]) {
@@ -100,8 +101,8 @@ vi dividers(ll N) {
     return b;
 }
 
-vi primeFactors2(ll N) {
-    vi factors;
+vll primeFactors2(ll N) {
+    vll factors;
     ll PF_idx = 0, PF = primes[PF_idx];
     while (N != 1 && (PF * PF <= N)) {
         if (N % PF == 0) {
@@ -309,7 +310,7 @@ int calculate(int a[], int i, int t, int n) {
     }
 
 }
-typedef vector<ll> vll;
+
 
 
 void walk(string s[], int i, int j, int n) {
@@ -366,81 +367,99 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 //     }
 // }
 
+ll sum(ll n, ll p) {
+    if (n <= 9) {
+        return (n * (n+1)) / 2;
+    } else {
+        ll d = n / p;
+        ll s = (p * d) - 1;
+        ll p2 = p;
+        ll p3 = p;
+        while (p2 > (n-s-1)) {
+            p2 /= 10;
+        }
+        return (n - s) * d + sum(n - s-1, p2) + (d-1)*(d)/2 * (p3)  + sum(p3-1, p3/10) ; 
+    }
+}
+
+int digits(int n) {
+	if (n <= 9) {
+		return n+1;
+	} else {
+		int d = (int) (log10(n) + 1);
+		int p = 1;
+		while (p <= n) {
+			p *= 10;
+		}
+		p /= 10;
+		p--;
+		return d * (n - p) + digits(p);
+	}
+}
+
+long long mdc(long long a, long long b){
+     long long loops = 0; // contador para fins da questão apenas
+     ll c = a;
+    ll d = b;
+    a = max(c,d);
+    b = min(c,d);
+     while( a != b ){
+        //  loops++;
+        
+         if( a > b ){ 
+             ll c  = a/b;
+             if (a%b) {
+                loops += c;
+                a = a-c*b;
+             } else {
+                a = b;
+                loops+= c-1;
+             }
+         }
+        ll c = a;
+        ll d = b;
+        a = max(c,d);
+        b = min(c,d);
+     }
+     return loops;
+}
 
 #define CON 1000000007
 int main() {
     int t;
     cin >> t;
-    for (int i = 0;i < t;i++) {
+    for (int i = 0; i < t; i++) {
         int n;
         cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+        ll c;
+        cin >> c;
+        ll mi = c, ma = c;
+        for (int j = 1;j < n; j++) {
+            cin >> c;
+            if (c > ma) {
+                ma = c;
+            } else if (c < mi) {
+                mi = c;
+            }
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
+        int t = 1;
+        ll t2 = 1;
+        ll m2 = mi;
+        while (mi < ma) {
+            mi += t2;
+            t++;
+            t2*=2;
         }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
+        t2 = 1;
+        int t3 = t;
+        co t en;
+        while (t>1) {
+            co m2 << " ";
+            t--;
+            m2 += t2;
+            t2 *= 2;
         }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
-
-
-
-       
-        
+        co m2 en;
     }
-
-        
-    
-    
-    
-    
-    
-   
-   
-
-   
-
-    
-           
     
 }
-
-    
-
-    
-
-
-    
-
-
-
-    
-    
-    
-
-
-    
-
-  
-    
-    
-    
-    
-    
-   
-
-
-    
-  
-
-

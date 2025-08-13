@@ -372,30 +372,73 @@ int main() {
     int t;
     cin >> t;
     for (int i = 0;i < t;i++) {
+    
         int n;
         cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
-        }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
-        }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
+        string s;
+        cin >> s;
+        if (s[0] < s[s.size()-1]) {
+            if (n % 2) {
+                string s2 = s;
+                reverse(s2.begin(), s2.end());
+                s = s + s2;
+                cout << s EN;
+            } else {
+                cout << s EN;
+            }
 
+        } else if (s[0] > s[s.size()-1]) {
+            if (n % 2) {
+                reverse(s.begin(), s.end());
+                cout << s EN;
+            } else {
+                reverse(s.begin(), s.end());
+                string s2 = s;
+                reverse(s2.begin(), s2.end());
+                s = s + s2;
+                cout << s EN;
+            }
 
+        } else {
+            int f = 0;
+            for (int i = 0; i < s.size()-i; i++) {
+                if (s[i] > s[s.size()-1-i]) {
+                    f = 1;
+                    break;
+                } else if (s[i] < s[s.size()-1-i]) {
+                    f = 2;
+                    break;
+                }
+            }
+            if (f == 1) {
+                if (n%2) {
+                    reverse(s.begin(), s.end());
+                    cout << s EN;
+                } else {
+                    reverse(s.begin(), s.end());
+                    string s2 = s;
+                    reverse(s2.begin(), s2.end());
+                    s = s + s2;
+                    cout << s EN;
+                }
+            } else if (f== 2) {
+                if (n % 2) {
+                    string s2 = s;
+                    reverse(s2.begin(), s2.end());
+                    string s = s + s2;
+                    cout << s EN;
 
-       
+                } else {
+                    cout << s EN;
+                }
+
+            } else {
+                cout << s EN;
+            }
+        }
+      
+        
+        
         
     }
 

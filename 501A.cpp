@@ -13,11 +13,6 @@
 #include <algorithm>
 #include <set>
 #include <list>
-#ifdef LOCAL
-#include "debug.cpp"
-#else
-#define debug(...)
-#endif
 
 
 using namespace std;
@@ -37,7 +32,7 @@ typedef vector<string> vs;
 
 
 ll _sieve_size;
-bitset <100> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -181,15 +176,13 @@ vi primeFactors4(ll N) {
 
 }*/
 
-
+/*
 typedef struct no *p_no;
 
 struct no {
     char dado;
-    p_no prox;
+    vector<p_no> prox;
     p_no ant;
-    p_no fim;
-    p_no inicio;
 };
 
 p_no criar_lista() {
@@ -198,7 +191,7 @@ p_no criar_lista() {
 
 void destruir_lista(p_no lista) {
     if (lista != NULL) {
-        destruir_lista(lista->prox);
+        //destruir_lista(lista->prox);
         free(lista);
     }
 }
@@ -207,32 +200,15 @@ p_no adicionar_elemento(p_no lista, char x) {
     p_no novo;
     novo = new no;
     novo->dado = x;
-    novo->prox = lista;
+    //novo->prox = lista;
     if (lista != NULL) {
         lista->ant = novo;
     }
     novo->ant = NULL;
-    if (lista == NULL) {
-        novo->fim=novo;
-    } else {
-        novo->fim=lista->fim;
-    }
     return novo;
 }
 
-p_no remover_elemento(p_no elem) {
-    if (elem->prox != NULL) {
-        elem->prox->ant = elem->ant;
-    }
-    if (elem->ant != NULL) {
-        elem->ant->prox = elem->prox;
-    }
-    p_no pro = elem->prox;
-    free(elem);
-    return pro;
-}
 
-/*
 void visit(int* d, vector<int> v[], int j, int* m) {
     (*d)++;
     for (int i = 0; i < v[j].size(); i++) {
@@ -393,45 +369,28 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 
 #define CON 1000000007
 int main() {
-    int n,m;
-    cin>>n>>m;
-    ll a[n];
-    ll s1[n], s2[n];
-    s1[0] = 0;
+    int a,b,c,d;
+        cin >> a >> b >> c >> d;
 
-    cin >> a[0];
-    for (int i = 1; i < n; i++) {
-        cin >> a[i];
-        if (a[i] < a[i-1]) {
-            s1[i] = s1[i-1] + a[i-1]-a[i];
-        } else {
-            s1[i] = s1[i-1];
-        }
+    int e = max(3*a/10, a - a/250*c);
+    int f = max(3*b/10, b - b/250 * d);
+    if (e > f) {
+        cout << "Misha" EN;
+    } else if (e < f) {
+        cout << "Vasya" EN;
+    } else {
+        cout << "Tie" EN;
     }
-    s2[n-1] = 0;
-    for (int i = n-2; i > -1; i--) {
-        if (a[i] < a[i+1]) {
-            s2[i] = s2[i+1] + a[i+1] - a[i];
-        } else {
-            s2[i] = s2[i+1];
-        }
-        
-    }
-    ll s[m], t[m];
-    for (int i = 0; i < m; i++) {
-        cin >> s[i] >> t[i];
-        s[i]--;
-        t[i]--;
-        if (s[i] < t[i]) {
-            cout << s1[t[i]] - s1[s[i]] EN;
-        } else {
-            cout << s2[t[i]] - s2[s[i]] EN;
-        }
-    }
-
+ 
     
+   
+   
 
    
+
+    
+           
+    
 }
 
     

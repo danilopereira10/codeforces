@@ -32,7 +32,7 @@ typedef vector<string> vs;
 
 
 ll _sieve_size;
-bitset <2602> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -371,39 +371,45 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 int main() {
     int t;
     cin >> t;
-    for (int i = 0;i < t;i++) {
-        int n;
-        cin >> n;
-        stringstream ss;
+    for (int i = 0; i < t; i++) {
+        string s;
+        int f = 0;
         int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+        for (int i = s.size()-2; i > -1; ) {
+            s[i] += c;
+            if (s[i+1] >= '5') {
+                s[i+1] = '0';
+                s[i] = s[i] + 1;
+                if (s[i] > '9') {
+                    s[i] = '0';
+                    c = 1;
+                    i--
+                    for (; i > -1; ) {
+                        s[i] 
+                        if (i == 0 && s[i]=='0') {
+                            f = 1;
+                        }
+                        i--;
+                        
+                    }
+                }
+            }
+            
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
-        }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
-
-
-
-       
-        
     }
+    int a,b,c,d;
+        cin >> a >> b >> c >> d;
 
-        
-    
-    
-    
-    
+    int e = max(3*a/10, a - a/250*c);
+    int f = max(3*b/10, b - b/250 * d);
+    if (e > f) {
+        cout << "Misha" EN;
+    } else if (e < f) {
+        cout << "Vasya" EN;
+    } else {
+        cout << "Tie" EN;
+    }
+ 
     
    
    

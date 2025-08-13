@@ -1,4 +1,5 @@
 
+
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -22,18 +23,19 @@ typedef vector<tuple<int,int>> vti;
 stack<tuple<int, int, int>> num;/*  */
 stack<tuple<int, int, int>> num2;
 typedef vector<string> vs;
+typedef vector<ll> vll;
 
-#define YES cout << "YES" << endl;
-#define NO cout << "NO" << endl;
+#define yes cout << "YES" << endl;
+#define no cout << "NO" << endl;
 #define CI cin >>
-#define CO cout <<
-#define EN << endl;
+#define co cout <<
+#define en << endl;
 
 
 
 ll _sieve_size;
-bitset <2602> bs;
-vi primes;
+bitset <10002> bs;
+vll primes;
 
 void sieve(ll upperbound) {
     _sieve_size = upperbound + 1;
@@ -41,7 +43,7 @@ void sieve(ll upperbound) {
     bs[0] = bs[1] = 0;
     for (ll i = 2; i <= _sieve_size; i++) if (bs[i]) {
         for (ll j = i * i; j <= _sieve_size; j += i) bs[j] = 0;
-        primes.push_back((int) i);
+        primes.push_back((ll) i);
     }
 }
 
@@ -52,13 +54,13 @@ bool isPrime(ll N) {
     return true;
 }
 
-int gcd(int a, int b) {
+ll gcd(ll a, ll b) {
     return b == 0 ? a : gcd(b, a % b);
 }
 
 
-vi primeFactors(ll N) {
-    vi factors;
+vll primeFactors(ll N) {
+    vll factors;
     ll PF_idx = 0, PF = primes[PF_idx];
     while (N != 1 && (PF * PF <= N)) {
         while (N % PF == 0) {
@@ -73,26 +75,26 @@ vi primeFactors(ll N) {
     return factors;
 }
 
-vi dividers(ll N) {
-    vi f = primeFactors(N);
-    vi b;
+vector<ll> dividers(ll N) {
+    vll f = primeFactors(N);
+    vector<ll> b;
     
     b.push_back(1);
     ll c = 1;
     //b.push_back(f[0]);
     //ll c = f[0];
-    for (int i = 0 ; i < f.size(); ) {
+    for (int i = 0 ; i < (int) f.size(); ) {
         c = f[i];
-        vi d;
+        vll d;
         d.push_back(c);
         i++;
         while (c == f[i]) {
             d.push_back(c*d[d.size()-1]);
             i++;
         }
-        int j = b.size();
+        int j = (int) b.size();
         for (int i = 0; i < j; i++) {
-            for (int k = 0; k < d.size(); k++) {
+            for (int k = 0; k < (int) d.size(); k++) {
                 b.push_back(b[i]*d[k]);
             }
         }
@@ -100,8 +102,8 @@ vi dividers(ll N) {
     return b;
 }
 
-vi primeFactors2(ll N) {
-    vi factors;
+vll primeFactors2(ll N) {
+    vll factors;
     ll PF_idx = 0, PF = primes[PF_idx];
     while (N != 1 && (PF * PF <= N)) {
         if (N % PF == 0) {
@@ -119,8 +121,8 @@ vi primeFactors2(ll N) {
     return factors;
 }
 
-vi primeFactors3(ll N) {
-    vi factors;
+vll primeFactors3(ll N) {
+    vll factors;
     ll PF_idx = 0, PF = primes[PF_idx];
     while (N != 1 && (PF * PF <= N)) {
         if (N % PF == 0) {
@@ -139,8 +141,8 @@ vi primeFactors3(ll N) {
     return factors;
 }
 
-vi primeFactors4(ll N) {
-    vi factors;
+vll primeFactors4(ll N) {
+    vll factors;
 
     ll PF_idx = 0;
     ll PF=primes[0];
@@ -309,7 +311,7 @@ int calculate(int a[], int i, int t, int n) {
     }
 
 }
-typedef vector<ll> vll;
+
 
 
 void walk(string s[], int i, int j, int n) {
@@ -366,81 +368,97 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 //     }
 // }
 
+ll sum(ll n, ll p) {
+    if (n <= 9) {
+        return (n * (n+1)) / 2;
+    } else {
+        ll d = n / p;
+        ll s = (p * d) - 1;
+        ll p2 = p;
+        ll p3 = p;
+        while (p2 > (n-s-1)) {
+            p2 /= 10;
+        }
+        return (n - s) * d + sum(n - s-1, p2) + (d-1)*(d)/2 * (p3)  + sum(p3-1, p3/10) ; 
+    }
+}
+
+typedef unordered_map<ll,ll> u;
+
+// int binarySearch(ll arr[], int low, int high, int x)
+// {
+//     int f = 0, l = -1;
+//     while (low <= high) {
+//         int mid = low + (high - low) / 2;
+
+//         // Check if x is present at mid
+//         if (arr[mid] == x) {
+//             return mid;
+//         }
+
+//         // If x greater, ignore left half
+//         if (arr[mid] <= x)
+//             low = mid + 1;
+
+//         // If x is smaller, ignore right half
+//         else {
+//             high = mid - 1;
+//         }
+//     }
+//     if (f) {
+//         return l;
+//     } else {
+//         // If we reach here, then element was not present
+//         return -1;
+//     }
+// }
+
+int binarySearch(ll arr[], int low, int high, int x)
+{
+    int f = 0, l = -1;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+
+
+        if (arr[mid] <= x) {
+            f = 1;
+            if (mid > l) {
+                l = mid;
+            }
+            low = mid + 1;
+
+        } else {
+            // If x is smaller, ignore right half 
+            high = mid - 1;
+        }
+    }
+    if (f) {
+        return l;
+    } else {
+        // If we reach here, then element was not present
+        return -1;
+    }
+}
 
 #define CON 1000000007
 int main() {
     int t;
     cin >> t;
-    for (int i = 0;i < t;i++) {
-        int n;
+
+    for (int i = 0;i < t; i++) {
+        ll n;
         cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+        if (n < 4 || n%2) {
+            co -1 en;
+        } else if (n % 6) {
+            co n / 6 + 1 << " " << n / 4 en;
+        } else {
+            co n / 6 << " " << n / 4 en;
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
-        }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
-
-
-
        
         
     }
-
-        
-    
-    
-    
-    
-    
    
-   
-
-   
-
-    
-           
-    
 }
-
-    
-
-    
-
-
-    
-
-
-
-    
-    
-    
-
-
-    
-
-  
-    
-    
-    
-    
-    
-   
-
-
-    
-  
 
 

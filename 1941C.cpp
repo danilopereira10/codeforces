@@ -372,30 +372,47 @@ int main() {
     int t;
     cin >> t;
     for (int i = 0;i < t;i++) {
+    
         int n;
         cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+        string s;
+        cin >> s;
+        int d = 0;
+        if (s.size() >= 3) {
+            for (int i = 0; i < s.size();) {
+                if (i +4 < s.size()) {
+                    if ((s[i]=='m') && (s[i+1] == 'a') && (s[i+2] == 'p') && 
+                        (s[i+3]=='i') && (s[i+4]=='e')) {
+                            i += 5;
+                            d++;
+                    } else if ((s[i] == 'p') && (s[i+1]=='i') && (s[i+2]=='e') ) {
+                        i += 3;
+                        d++;
+                    } else if ((s[i]=='m') && (s[i+1] == 'a') && (s[i+2] == 'p')) {
+                        i += 3;
+                        d++;
+                    } else {
+                        i++;
+                    }
+                } else if (i + 2 < s.size()) {
+                    if ((s[i] == 'p') && (s[i+1]=='i') && (s[i+2]=='e') ) {
+                        i += 3;
+                        d++;
+                    } else if ((s[i]=='m') && (s[i+1] == 'a') && (s[i+2] == 'p')) {
+                        i += 3;
+                        d++;
+                    } else {
+                        i++;
+                    }
+                } else {
+                    break;
+                }
+                
+            }
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
-        }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
-
-
-
+        cout << d EN;
        
+        
         
     }
 

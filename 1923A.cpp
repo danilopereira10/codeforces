@@ -32,7 +32,7 @@ typedef vector<string> vs;
 
 
 ll _sieve_size;
-bitset <2602> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -369,33 +369,42 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 
 #define CON 1000000007
 int main() {
+    //sieve(33000);
     int t;
     cin >> t;
     for (int i = 0;i < t;i++) {
         int n;
         cin >> n;
-        stringstream ss;
+        ll a[n];
+        for (auto &e : a) {
+            cin >> e;
+        }
+        int j = 0;
+        for (; j < n; j++) {
+            if (a[j] == 1) {
+                break;
+            }
+        }
+        int j2 = n - 1;
+        for (; j2 > -1; j2--) {
+            if (a[j2]) {
+                break;
+            }
+        }
+        j++;
         int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+        for (; j < j2; j++) {
+            if (!a[j]) {
+                c++;
+            }
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
-        }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
-
-
-
+        cout << c EN;
        
+        
+       
+      
+        
+        
         
     }
 

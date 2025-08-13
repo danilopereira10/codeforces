@@ -32,7 +32,7 @@ typedef vector<string> vs;
 
 
 ll _sieve_size;
-bitset <2602> bs;
+bitset <33002> bs;
 vi primes;
 
 void sieve(ll upperbound) {
@@ -369,33 +369,61 @@ ll sum(vector<ll> p2, ll d, ll i, ll n, ll s) {
 
 #define CON 1000000007
 int main() {
+    sieve(33000);
     int t;
     cin >> t;
     for (int i = 0;i < t;i++) {
-        int n;
-        cin >> n;
-        stringstream ss;
-        int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+        ll a,b;
+        cin >> a >> b;
+        vi f = primeFactors(a);
+        //vi f2 = primeFactors(b);
+        //ll m = min(f[0], f2[0]);
+        ll x = a;
+        vi f3;
+        for (int i = 0; i < f.size(); i++) {
+            f3.push_back(f[i]);
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
+        for (int i = 0; i < f.size(); i++) {
+            if (!(b % f[i])) {
+                b /= f[i];
+            }
         }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
+        x *= b;
+        if (b != 1) {
+            f3.push_back(b);
+            sort(f3.begin(), f3.end());
         }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
+        int f4 = f3[0];
+        int f5 = 0;
+        if (f3.size() >= 2) {
+            if (f3[0] == f3[1]) {
+                for (int i = 2; i < f3.size(); i++) {
+                    if (f3[i] != f4) {
+                        f5 = 1;
+                        if (f3[i] > f4 * f4) {
+                            x *= f4;
+                        } else {
+                            break;
+                        }
+                        break;
+                    }
+                }
+                if (f5) {
 
-
-
-       
+                } else {
+                    x *= f3[0];
+                }
+            }
+        } else {
+            x *= f3[0];
+        }
+        
+        cout << x EN;
+    
+        
+      
+        
+        
         
     }
 

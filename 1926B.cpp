@@ -374,27 +374,48 @@ int main() {
     for (int i = 0;i < t;i++) {
         int n;
         cin >> n;
-        stringstream ss;
+        string s[n];
+        for (int i = 0; i < n; i++) {
+            cin >> s[i];
+        }
+        int j = -1;
+        for (j = 0; j < n; j++) {
+            int f = 0;
+            for (int k = 0; k < n; k++) {
+                if (s[j][k] == '1') {
+                    f = 1;
+                    break;
+                }
+            }
+            if (f) {
+                break;
+            }
+        }
         int c = 0;
-        while (n >= 28) {
-            ss << "z";
-            n -= 26;
-            c++;
+        int f2 = 0;
+        for (; j < n; j++) {
+            int c2 = 0;
+            for (int k = 0; k < n; k++) {
+                if (s[j][k] == '1') {
+                    c2++;
+                }
+            }
+            if (c == 0) {
+                c = c2;
+            } else if (c2 == c) {
+                f2 = 1;
+                break;
+            } else {
+                break;
+            }
         }
-        if (c == 0) {
-            ss << (char) ('a' + (n-3)) << "aa";
+        if (f2) {
+            cout << "SQUARE" EN;
+        } else {
+            cout << "TRIANGLE" EN;
         }
-        else if (c == 1) {
-            ss << (char)('a' + (n-2)) << 'a';
-        } else if (c==2) {
-            ss << (char) ('a'+(n-1));
-        }
-        string s = ss.str();
-        reverse(s.begin(), s.end());
-        cout << s EN;
 
-
-
+       
        
         
     }
